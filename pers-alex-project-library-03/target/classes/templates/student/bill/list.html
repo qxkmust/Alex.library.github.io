@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'bill')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>图书管理页面</span>
+        </div>
+        <form id="billListForm">
+            <div class="search">
+                <input type="radio" name="type" value="borrow" checked/> 当前账单
+                <input type="radio" name="type" value="return" /> 历史账单
+                <input type="button" value="查询" onclick="search();"/>
+            </div>
+        </form>
+        <table id="billTable" class="layui-table">
+        </table>
+
+    </div>
+</section>
+
+
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+<span th:include="main/baseurl :: html"></span>
+<script th:inline="javascript">
+    $(function(){
+        var billListTable;
+        var options;
+        var BILL_LIST_URL = getBaseUrl()+'/student/bills/get';
+        bootPage = function(){
+            registerEvent();
+            loadTable();
+        };
+
+        registerEvent = function(){},
+
+            loadTable = function(){
+                layui.use("table",function(){
+                    billListTable = layui.table;
+                    var cols = [
+                        {field: 'sBookId',title:'书籍编号'},
+                        {field: 'sBookName',title:'书名'},
+                        {field: 'sBorrowDate',title:'借书时间',templet:function(d){return moment(d.sBorrowDate).format("YYYY-MM-DD HH:mm:ss");}},
+                        {field: 'sExpectReturnDate',title:'还书时间',templet:function(d){return moment(d.sExpectReturnDate).format("YYYY-MM-DD HH:mm:ss");}},
+                        {field: 'iOverDay',title:'逾期天数'},
+                        {field: 'fTicketFee',title:'账单金额'},
+                        {
+                            field: 'iPayoff',
+                            title:'账单状态',
+                            templet:function(d){
+                                if(d.iPayoff > 0){
+                                    return "未支付";
+                                }else{
+                                    return "已支付";
+                                }
+                            }
+                        }
+                    ];
+                    options = {
+                        url: BILL_LIST_URL,
+                        elem: '#billTable', //id选择器
+                        height: 300,
+                        even: true,
+                        limit: 5,//默认页大小
+                        limits: [5,10,20,25],
+                        page: {
+                            layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                            ,groups: 1 //只显示 1 个连续页码
+                            ,first: false //不显示首页
+                            ,last: false //不显示尾页
+                        },
+                        request: {
+                            pageName: 'pageNum' //页码的参数名称，默认：page
+                            ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                        },response: {
+                            statusName: 'code' //规定数据状态的字段名称，默认：code
+                            ,statusCode: 0 //规定成功的状态码，默认：0
+                            ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                            ,countName: 'total' //规定数据总数的字段名称，默认：count
+                            ,dataName: 'data' //规定数据列表的字段名称，默认：data
+                        },
+                        cols: [cols]
+                    };
+                    billListTable.render(options);
+                });
+            },
+            search = function(){
+                options.url = BILL_LIST_URL + "?" + $('#billListForm').serialize();
+                billListTable.reload("billTable",options);
+            };
+
+        bootPage();
+    });
+</script>
+</body>
+</html>

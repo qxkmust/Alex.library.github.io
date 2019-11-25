@@ -1,0 +1,15 @@
+utils\RequestUtil.class
+entities\Log.class
+entities\RestSet.class
+entities\Borrow.class
+entities\Book.class
+utils\MethodAnnotation.class
+utils\ClassAnnotation.class
+entities\BookSort.class
+utils\PermissionAnnotation.class
+entities\Ticket.class
+entities\User.class
+entities\Manager.class
+entities\PageInfoLayui.class
+entities\Return.class
+entities\Student.class

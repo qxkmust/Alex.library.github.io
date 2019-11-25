@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'manage')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>图书管理页面 >> 书籍查看</span>
+        </div>
+
+        <div class="providerView">
+            <p><strong>书籍编号：</strong><span th:text="${book.sBookId}"></span></p>
+            <p><strong>书名：</strong><span th:text="${book.sBookName}"></span></p>
+            <p><strong>作者：</strong><span th:text="${book.sBookAuthor}"></span></p>
+            <p><strong>出版社：</strong><span th:text="${book.sBookPub}"></span></p>
+            <p><strong>借书时间：</strong><span th:text="${#dates.format(book.sBorrowDate,'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            <p><strong>还书时间：</strong><span th:text="${#dates.format(book.sExpectReturnDate,'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            <p><strong>当前状态：</strong><span th:text="${#dates.format(book.sExpectReturnDate,'yyyy-MM-dd HH:mm:ss') < #dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm:ss') ? '已逾期' : '未逾期'}"></span></p>
+            <a th:href="@{/student/manage}">返回</a>
+        </div>
+    </div>
+</section>
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+<script th:src="@{/js/time.js}"></script>
+</body>
+</html>

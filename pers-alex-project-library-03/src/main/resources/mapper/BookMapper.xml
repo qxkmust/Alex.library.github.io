@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="library.mapper.BookMapper">
+    <select id="book" resultType="entities.Book">
+        select book.*,sort.* from LIB_BOOK book left join LIB_BOOK_SORT sort on book.s_book_sort = sort.s_sort_id where book.s_book_id = #{sBookId}
+    </select>
+    <select id="student" resultType="entities.Student">
+        select * from LIB_STUDENT where s_stu_id = #{sStuId}
+    </select>
+    <select id="books" resultType="entities.Book">
+        select book.*,sort.s_sort_name from LIB_BOOK book left join LIB_BOOK_SORT sort on book.s_book_sort = sort.s_sort_id where 1 = 1
+        <if test="sBookSort != null and sBookSort != ''">
+            and book.s_book_sort = #{sBookSort}
+        </if>
+        <if test="sBookName != null and sBookName != ''">
+            and book.s_book_name like '${sBookName}%'
+        </if>
+  </select>
+    <select id="getBooksByStuId" resultType="entities.Borrow">
+        <choose>
+            <when test="type == 'borrow'">
+                select book.*,sort.s_sort_name, borrow.s_stu_id,borrow.s_borrow_date,borrow.s_expect_return_date from
+                (select * from LIB_BORROW where s_stu_id = #{sStuId}) borrow left join LIB_BOOK book on book.s_book_id = borrow.s_book_id
+                    left join LIB_BOOK_SORT sort on sort.s_sort_id = book.s_book_sort
+            </when>
+            <otherwise>
+                select book.*, his.s_borrow_date,his.s_return_date as s_expect_return_date from
+                (select * from LIB_BORROW_HIS where s_stu_id = #{sStuId}) his left join LIB_BOOK book on book.s_book_id = his.s_book_id
+                    left join LIB_BOOK_SORT sort on sort.s_sort_id = book.s_book_sort
+            </otherwise>
+        </choose>
+    </select>
+    <select id="bills" resultType="entities.Ticket">
+        <choose>
+            <when test="type == 'borrow'">
+                select book.s_book_name,ticket.*,borrow.s_borrow_date,borrow.s_expect_return_date from
+                    (select * from LIB_TICKET where i_payoff = 1 and s_stu_id = #{sStuId}) ticket
+                        left join LIB_BORROW borrow on borrow.s_book_id = ticket.s_book_id
+                        left join LIB_BOOK book on book.s_book_id = ticket.s_book_id
+            </when>
+            <otherwise>
+                select book.s_book_name,ticket.*,his.s_borrow_date,his.s_return_date from
+                    (select * from LIB_TICKET where i_payoff = 0 and s_stu_id = #{sStuId}) ticket
+                        left join LIB_BORROW_HIS his on his.s_book_id = ticket.s_book_id
+                        left join LIB_BOOK book on book.s_book_id = ticket.s_book_id
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getBookByStuId" resultType="entities.Borrow">
+        select book.*, sort.s_sort_name,borrow.s_stu_id,borrow.s_borrow_date,borrow.s_expect_return_date from
+                (select * from LIB_BORROW where s_stu_id = #{sStuId} and s_book_id = #{sBookId}) borrow left join LIB_BOOK book on book.s_book_id = borrow.s_book_id
+                    left join LIB_BOOK_SORT sort on sort.s_sort_id = book.s_book_sort
+    </select>
+    <select id="booksort" resultType="entities.BookSort">
+        select * from LIB_BOOK_SORT
+    </select>
+    <insert id="borrow">
+        {call PROC_BORROW(#{sStuId,mode=IN},#{sBookId,mode=IN},#{sBorrowDate,mode=IN},#{sExpectReturnDate,mode=IN})}
+    </insert>
+    <update id="delay">
+        update LIB_BORROW set s_expect_return_date = #{sExpectReturnDate} where s_stu_id = #{sStuId} and s_book_id = #{sBookId}
+    </update>
+    <update id="updateBook">
+        update LIB_BOOK set s_book_name = #{sBookName},s_book_author = #{sBookAuthor},s_book_pub = #{sBookPub},s_book_sort = #{sBookSort},s_book_record = #{sBookRecord}
+        where s_book_id = #{sBookId}
+    </update>
+    <insert id="addBook">
+        insert into LIB_BOOK(s_book_id,s_book_name,s_book_pub,s_book_author,s_book_sort,s_book_record)
+            values(#{sBookId},#{sBookName},#{sBookPub},#{sBookAuthor},#{sBookSort},date_format(now(),'%Y-%m-%d %H:%i:%s'))
+    </insert>
+    <select id="getBorrowBookCountOfStudent" resultType="entities.Student">
+        <choose>
+            <when test="type == 'borrow'">
+                select stu.s_stu_id,stu.s_stu_name,stu.s_stu_major,stu.s_stu_grade,stu.i_stu_integrity,borrow.i_books
+                    from (select s_stu_id,count(*) as i_books from LIB_BORROW group by s_stu_id) borrow left join LIB_STUDENT stu on stu.s_stu_id = borrow.s_stu_id
+                where 1 = 1
+                <if test="sStuId != null and sStuId != ''">
+                    and stu.s_stu_id = #{sStuId}
+                </if>
+            </when>
+            <otherwise>
+                select stu.s_stu_id,stu.s_stu_name,stu.s_stu_major,stu.s_stu_grade,stu.i_stu_integrity, ticket.i_books
+                    from (select * from LIB_STUDENT where i_stu_integrity = 0) stu left join (select s_stu_id, count(*) as i_books from LIB_TICKET group by s_stu_id)ticket on ticket.s_stu_id = stu.s_stu_id
+                where 1 = 1
+                <if test="sStuId != null and sStuId != ''">
+                    and stu.s_stu_id = #{sStuId}
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getStudentBooks" resultType="entities.Borrow">
+        <choose>
+            <when test="type == 'borrow'">
+                select book.*,sort.s_sort_name, borrow.s_stu_id,borrow.s_borrow_date,borrow.s_expect_return_date from
+                    (select * from LIB_BORROW where s_stu_id = #{sStuId}) borrow left join LIB_BOOK book on book.s_book_id = borrow.s_book_id
+                left join LIB_BOOK_SORT sort on sort.s_sort_id = book.s_book_sort
+            </when>
+            <otherwise>
+                select book.*,sort.s_sort_name, borrow.s_stu_id,borrow.s_borrow_date,borrow.s_expect_return_date from
+                    (select * from LIB_BORROW where s_stu_id = #{sStuId} and s_expect_return_date &lt; now()) borrow left join LIB_BOOK book on book.s_book_id = borrow.s_book_id
+                left join LIB_BOOK_SORT sort on sort.s_sort_id = book.s_book_sort
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getLoseIntegrityStudents" resultType="entities.Student">
+        select stu.s_stu_id,stu.s_stu_name,stu.s_stu_major,stu.s_stu_grade,stu.i_stu_integrity, ticket.i_books
+        from (select * from LIB_STUDENT where i_stu_integrity = 0) stu left join (select s_stu_id, count(*) as i_books from LIB_TICKET group by s_stu_id)ticket on ticket.s_stu_id = stu.s_stu_id
+        where 1 = 1
+        <if test="_parameter != null and _parameter != ''">
+            and stu.s_stu_id = #{sStuId}
+        </if>
+    </select>
+    <update id="resetStudentIntegrity">
+        {call PROC_RESET_STU_INTEGRITY(#{sStuId,mode=IN})}
+    </update>
+    <select id="getBills" resultType="entities.Student">
+        select stu.s_stu_id,stu.s_stu_name,stu.s_stu_major,stu.s_stu_grade,stu.i_stu_integrity, ticket.i_books, ticket.f_bills
+        from (
+                select * from LIB_STUDENT where i_stu_integrity = 0
+                <if test="_parameter != null and _parameter != ''">
+                    and s_stu_id = #{sStuId}
+                </if>
+            ) stu right join (select s_stu_id, i_payoff, round(sum(f_ticket_fee),2) as f_bills,count(*) as i_books from LIB_TICKET where i_payoff = 1 group by s_stu_id )ticket on ticket.s_stu_id = stu.s_stu_id
+    </select>
+    <select id="getStudentOverdueNum" resultType="java.lang.Integer">
+        select FUNC_GET_OVERDUE_NUM(#{sStuId,mode=IN,jdbcType=VARCHAR}) from dual
+    </select>
+    <select id="getBillsDetail" resultType="entities.Ticket">
+        select book.s_book_name,ticket.*,borrow.s_borrow_date,borrow.s_expect_return_date from
+                    (select * from LIB_TICKET where i_payoff = 1 and s_stu_id = #{sStuId}) ticket
+                        left join LIB_BORROW borrow on borrow.s_book_id = ticket.s_book_id
+                        left join LIB_BOOK book on book.s_book_id = ticket.s_book_id
+    </select>
+</mapper>

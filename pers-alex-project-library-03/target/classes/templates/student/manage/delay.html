@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'manage')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>图书管理页面 >> 延期还书</span>
+        </div>
+        <div class="providerAdd">
+            <form id="delayForm" th:action="@{/student/manage/delay}" th:method="post">
+                <input type="hidden" name="_method" value="put"/>
+                <input type="hidden" name="sStuId" th:value="${session.loginUser.sUsername}"/>
+                <div>
+                    <span><strong>书籍编号：</strong></span>
+                    <input type="text" name="sBookId" th:value="${book.sBookId}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>书&emsp;&emsp;名：</strong></span>
+                    <input type="text" th:value="${book.sBookName}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>作&emsp;&emsp;者：</strong></span>
+                    <input type="text" th:value="${book.sBookAuthor}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>出版社：&emsp;</strong></span>
+                    <input type="text" th:value="${book.sBookPub}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>书籍类别：</strong></span>
+                    <input type="text" th:value="${book.sSortName}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>借书时间：</strong></span>
+                    <input type="text" name="sBorrowDate" th:value="${#dates.format(book.sBorrowDate,'yyyy-MM-dd HH:mm:ss')}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>延期时间：</strong></span>
+                    <input type="text" name="sExpectReturnDate" th:value="${#dates.format(#dates.create(#dates.year(book.sExpectReturnDate),#dates.month(book.sExpectReturnDate),#dates.day(book.sExpectReturnDate)+3,#dates.hour(book.sExpectReturnDate),#dates.minute(book.sExpectReturnDate),#dates.second(book.sExpectReturnDate)),'yyyy-MM-dd HH:mm:ss')}" th:readonly="readonly"/>
+                </div>
+                <div class="providerAddBtn">
+                    <!--<a href="#">保存</a>-->
+                    <!--<a href="providerList.html">返回</a>-->
+                    <input type="button" value="确认" onclick="$('#delayForm').submit();"/>
+                    <input type="button" value="取消" onclick="history.back(-1)"/>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</section>
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+</body>
+</html>

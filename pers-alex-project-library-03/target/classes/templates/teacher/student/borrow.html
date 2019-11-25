@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'student')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>学生管理页面 >> 当前未还</span>
+        </div>
+        <table id="bookTable" class="layui-table">
+        </table>
+        <div class="backView">
+            <a th:href="@{/teacher/students}">返回</a>
+        </div>
+    </div>
+</section>
+
+
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+<span th:include="main/baseurl :: html"></span>
+<script th:inline="javascript">
+    $(function(){
+        var bookListTable;
+        var options;
+        var cols;
+        var BOOK_LIST_URL = getBaseUrl()+'/teacher/student/books/'+[[${sStuId}]]+'?type=borrow';
+        bootPage = function(){
+            registerEvent();
+            loadTable();
+        };
+
+        registerEvent = function(){},
+
+        loadTable = function(){
+            layui.use("table",function(){
+                bookListTable = layui.table;
+                cols = [
+                    {field: 'sBookId',title:'书籍编号'},
+                    {field: 'sBookName',title:'书名'},
+                    {field: 'sBookAuthor',title:'作者'},
+                    {field: 'sBookPub',title:'出版社'},
+                    {field: 'sBorrowDate',title:'借书时间',templet:function(d){return moment(d.sBorrowDate).format("YYYY-MM-DD HH:mm:ss");}},
+                    {field: 'sExpectReturnDate',title:'还书时间',templet:function(d){return moment(d.sExpectReturnDate).format("YYYY-MM-DD HH:mm:ss");}}
+                ];
+                options = {
+                    url: BOOK_LIST_URL,
+                    elem: '#bookTable', //id选择器
+                    height: 300,
+                    even: true,
+                    limit: 5,//默认页大小
+                    limits: [5,10,20,25],
+                    page: {
+                        layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                        ,groups: 1 //只显示 1 个连续页码
+                        ,first: false //不显示首页
+                        ,last: false //不显示尾页
+                    },
+                    request: {
+                        pageName: 'pageNum' //页码的参数名称，默认：page
+                        ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                    },response: {
+                        statusName: 'code' //规定数据状态的字段名称，默认：code
+                        ,statusCode: 0 //规定成功的状态码，默认：0
+                        ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                        ,countName: 'total' //规定数据总数的字段名称，默认：count
+                        ,dataName: 'data' //规定数据列表的字段名称，默认：data
+                    },
+                    parseData: function(res){
+                        return res;
+                    },
+                    cols: [cols]
+                };
+                bookListTable.render(options);
+            });
+        };
+
+        bootPage();
+    });
+</script>
+</body>
+</html>

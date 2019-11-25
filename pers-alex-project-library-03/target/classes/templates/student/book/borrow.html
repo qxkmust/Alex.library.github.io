@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'borrow')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>图书借阅页面 >> 借阅</span>
+        </div>
+        <div class="providerAdd">
+            <form id="borrowForm" th:action="@{/borrow}" method="post">
+                <input th:type="hidden" id="sStuId" name="sStuId" th:value="${session.loginUser.sUsername}"/>
+                <div>
+                    <span><strong>书籍编号：</strong></span>
+                    <input type="text" name="sBookId" th:value="${book.sBookId}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>书&emsp;&emsp;名：</strong></span>
+                    <input type="text" th:value="${book.sBookName}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>作&emsp;&emsp;者：</strong></span>
+                    <input type="text" th:value="${book.sBookAuthor}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>出版社：&emsp;</strong></span>
+                    <input type="text" th:value="${book.sBookPub}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>书籍类别：</strong></span>
+                    <input type="text" th:value="${book.sSortName}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>借书时间：</strong></span>
+                    <input type="text" name="sBorrowDate" th:value="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm:ss')}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>还书时间：</strong></span>
+                    <input type="text" name="sExpectReturnDate" th:value="${#dates.format(#dates.create(#dates.year(#dates.createNow()),#dates.month(#dates.createNow()),#dates.day(#dates.createNow())+7,#dates.hour(#dates.createNow()),#dates.minute(#dates.createNow()),#dates.second(#dates.createNow())),'yyyy-MM-dd HH:mm:ss')}" th:readonly="readonly"/>
+                </div>
+                <div class="providerAddBtn">
+                    <!--<a href="#">保存</a>-->
+                    <!--<a href="providerList.html">返回</a>-->
+                    <input type="button" value="确认" onclick="borrow();"/>
+                    <input type="button" value="取消" onclick="history.back(-1)"/>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</section>
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+<span th:include="main/baseurl :: html"></span>
+<script type="text/javascript" th:inline="javascript">
+    $(function(){
+        borrow = function () {
+            $.ajax({
+               url: getBaseUrl()+'/student/'+$('#sStuId').val(),
+               success: function (result) {
+                   if(result && result.iStuIntegrity == 0){
+                        alert("逾期次数累计10次，不能借书!");
+                        return
+                   }else{
+                       $('#borrowForm').submit();
+                   }
+               }
+            });
+        };
+    });
+</script>
+</body>
+</html>

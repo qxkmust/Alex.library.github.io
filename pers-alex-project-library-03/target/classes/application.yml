@@ -1,0 +1,47 @@
+server:
+  port: 8001
+  servlet:
+    context-path: /library
+spring:
+  datasource:
+#    mysql8以上版本需要指定北京时区,8以下版本不需要设置时区
+    url: jdbc:mysql://120.77.169.130:33306/library?timezone=GMT%2B8&characterEncoding=utf8
+    username: root
+    password: root
+#    mysql8以上版本需要指定新的驱动类
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据源其他配置, DataSourceProperties中没有相关属性,默认无法绑定，需要在配置类中绑定以下属性
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 8
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall
+    maxPoolPreparedStatementPerConnectionSize: 25
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+    mvc:
+      date-format: yyyy-MM-dd
+  thymeleaf:
+    cache: false #开发环境下关闭thymeleaf模板缓存，thymeleaf默认是开启状态
+  messages:
+    basename: i18n.login
+  application:
+    name: library
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+
+logging:
+  level:
+    library.mapper: debug
+    root: info

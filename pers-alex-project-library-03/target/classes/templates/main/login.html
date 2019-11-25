@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>系统登录 - 图书管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="login_bg">
+    <section class="loginBox">
+        <header class="loginHeader">
+            <h1>图书管理系统</h1>
+        </header>
+        <section class="loginCont">
+			<div style="color:red; margin-left: 130px" th:text="${msg}">用户名错误！</div>
+                <form class="loginForm" th:action="@{/login}" th:method="post">
+				
+                <div class="inputbox">
+                    <label for="user" th:text="#{login.Username}">Username</label>
+                    <input id="user" type="text" name="username"  required/>
+                </div>
+                <div class="inputbox">
+                    <label for="mima" th:text="#{login.Password}">Password</label>
+                    <input id="mima" type="password" name="password"  required/>
+                </div>
+                <div class="checkbox">
+                    <label th:text="#{login.Identity}">Identity</label>
+                    <input type="radio" name="identity" value="1" th:checked="checked"/> [[#{login.Student}]]
+                    <input type="radio" name="identity" value="2"/> [[#{login.Teacher}]]
+                </div>
+                    <div class="subBtn">
+                    <input type="checkbox" name="rememberme" th:value="rememberme" checked/> [[#{login.Remember}]]
+                </div>
+				<br/>
+                <div class="subBtn">
+                    <input type="submit" th:value="#{login.Submit}"/>
+                    <input type="reset" th:value="#{login.Reset}"/>
+                </div>
+				<br/>
+				<div style="margin-left: 100px;">
+                    <a th:href="@{/login.html(lan='zh_CN')}">中文</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a th:href="@{/login.html(lan='en_US')}">English</a>
+                </div>
+            </form>
+        </section>
+    </section>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

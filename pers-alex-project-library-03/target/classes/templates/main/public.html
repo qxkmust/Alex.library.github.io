@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" id="publicHead">
+    <meta charset="UTF-8">
+    <title>图书管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/public.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}"/>
+
+    <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+    <script th:src="@{/webjars/moment/2.24.0/moment.js}"></script>
+</head>
+<body>
+<!--头部-->
+    <header class="publicHeader">
+        <h1>图书管理系统</h1>
+        <div class="publicHeaderR">
+            <p><span id="hours"></span><span style="color: #fff21b"> [[${session.loginUser.sUsername}]]</span> , 欢迎你！</p>
+            <a th:href="@{/logout}">退出</a>
+        </div>
+    </header>
+<!--时间-->
+    <section class="publicTime">
+        <span id="time"></span>
+        <a href="#">温馨提示：为了能正常浏览，请使用高版本浏览器！（IE10+）</a>
+    </section>
+<!--主体内容-->
+    <section class="publicMian ">
+        <div class="left">
+            <h2 class="leftH2"><span class="span1"></span>功能列表 <span></span></h2>
+            <nav>
+                <ul class="list">
+                    <li th:style="'background-image:url('+ @{/img/zd.png}+')'" th:id="${menuSelect == 'borrow' ? 'active' : ''}" th:hidden="${session.loginUser.iIdentity == 2}"><a th:href="@{/student/books}" th:hidden="${session.loginUser.sUsername == 'Teacher'}">图书借阅</a></li>
+                    <li th:style="'background-image: url('+@{/img/gys.png}+')'"  th:id="${menuSelect == 'manage' ? 'active' : ''}" th:hidden="${session.loginUser.iIdentity == 2}"><a th:href="@{/student/manage}">图书管理</a></li>
+                    <li th:style="'background-image: url('+@{/img/buy2.png}+')'" th:id="${menuSelect == 'bill' ? 'active' : ''}" th:hidden="${session.loginUser.iIdentity == 2}"><a th:href="@{/student/bills}">账单管理</a></li>
+                    <li th:style="'background-image: url('+@{/img/zd.png}+')'" th:id="${menuSelect == 'manage' ? 'active' : ''}" th:hidden="${session.loginUser.iIdentity == 1}"><a th:href="@{/teacher/books}">图书管理</a></li>
+                    <li th:style="'background-image: url('+@{/img/yh.png}+')'" th:id="${menuSelect == 'student' ? 'active' : ''}"th:hidden="${session.loginUser.iIdentity == 1}"><a th:href="@{/teacher/students}">学生管理</a></li>
+                    <li th:style="'background-image: url('+@{/img/gys.png}+')'" th:id="${menuSelect == 'integrity' ? 'active' : ''}"th:hidden="${session.loginUser.iIdentity == 1}"><a th:href="@{/teacher/student/integrity}">失信处理</a></li>
+                    <li th:style="'background-image: url('+@{/img/buy2.png}+')'" th:id="${menuSelect == 'bill' ? 'active' : ''}" th:hidden="${session.loginUser.iIdentity == 1}"><a th:href="@{/teacher/bills}">账单管理</a></li>
+                    <li th:style="'background-image: url('+@{/img/mm.png}+')'"th:id="${menuSelect == 'pwd' ? 'active' : ''}"><a th:href="@{/password}">密码修改</a></li>
+                    <li th:style="'background-image: url('+@{/img/tc.png}+')'"><a th:href="@{/logout}">退出系统</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right">
+           公共页面
+        </div>
+    </section>
+<footer class="footer"><div style="text-align:center;">	<p><a href="#" target="_blank"></a></p></div></footer>
+</body>
+</html>

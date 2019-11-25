@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/pers-alex-project-library-01/pers-alex-project-library-01.iml" filepath="$PROJECT_DIR$/pers-alex-project-library-01/pers-alex-project-library-01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pers-alex-project-library-02-base/pers-alex-project-library-02-base.iml" filepath="$PROJECT_DIR$/pers-alex-project-library-02-base/pers-alex-project-library-02-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pers-alex-project-library-03/pers-alex-project-library-03.iml" filepath="$PROJECT_DIR$/pers-alex-project-library-03/pers-alex-project-library-03.iml" />
+    </modules>
+  </component>
+</project>

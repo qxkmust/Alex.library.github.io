@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<input type="hidden" id="baseurl"/>
+<script type="text/javascript" th:inline="javascript">
+    function getBaseUrl(){
+        var url = [[${#httpServletRequest.getScheme() + "://" +
+                #httpServletRequest.getServerName() + ":" +
+                #httpServletRequest.getServerPort() +
+                #httpServletRequest.getContextPath()}]];
+        $('#baseurl').val(url);
+        return url;
+    }
+</script>
+</body>
+</html>

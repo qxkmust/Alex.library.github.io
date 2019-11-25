@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'bill')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>账单管理页面</span>
+        </div>
+        <form id="studentListForm">
+            <div class="search">
+                <span>学 号：</span>
+                <input type="text" name="sStuId" placeholder="请输入学号"/>
+                <input type="button" value="查询" onclick="search();"/>
+            </div>
+        </form>
+        <table id="studentTable" class="layui-table">
+        </table>
+
+    </div>
+</section>
+
+
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+<span th:include="main/baseurl :: html"></span>
+<script th:inline="javascript">
+    $(function(){
+        var studentListTable;
+        var options;
+        var cols;
+        var type;
+        var STU_LIST_URL = getBaseUrl()+'/teacher/student/bills';
+        bootPage = function(){
+            registerEvent();
+            loadTable();
+        };
+
+        registerEvent = function(){},
+
+        loadTable = function(){
+            layui.use("table",function(){
+                studentListTable = layui.table;
+                cols = [
+                    {field: 'sStuId',title:'学号'},
+                    {field: 'sStuName',title:'姓名'},
+                    {field: 'sStuMajor',title:'专业'},
+                    {field: 'sStuGrade',title:'年级'},
+                    {field: 'iBooks',title:'当前逾期书本数目',align:'center'},
+                    {field: 'fBills',title:'账单金额(元)',align:'center'},
+                    {
+                        field: 'sStuId',
+                        title:'操作',
+                        align: 'center',
+                        templet:function (d) {
+                                    return  '<div>'+
+                                        '<a href="'+getBaseUrl()+'/teacher/student/detail_overdue/' + d.sStuId +'"><img src="'+getBaseUrl()+ '/img/read.png" alt="逾期详情" title="逾期详情"/></a> '+
+                                        // '<a href="'+getBaseUrl()+'/teacher/student/pay/' + d.sStuId +'"><img src="'+getBaseUrl()+ '/img/pay.jpg" alt="在线支付" title="在线支付"/></a>'+
+                                        '<a href="javascript:void(0);"><img src="'+getBaseUrl()+ '/img/pay.jpg" alt="在线支付" title="在线支付" onclick="pay();"/></a>'+
+                                        '</div>';
+                        }
+                    }
+                ];
+                options = {
+                    url: STU_LIST_URL,
+                    elem: '#studentTable', //id选择器
+                    height: 300,
+                    even: true,
+                    limit: 5,//默认页大小
+                    limits: [5,10,20,25],
+                    page: {
+                        layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                        ,groups: 1 //只显示 1 个连续页码
+                        ,first: false //不显示首页
+                        ,last: false //不显示尾页
+                    },
+                    request: {
+                        pageName: 'pageNum' //页码的参数名称，默认：page
+                        ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                    },response: {
+                        statusName: 'code' //规定数据状态的字段名称，默认：code
+                        ,statusCode: 0 //规定成功的状态码，默认：0
+                        ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                        ,countName: 'total' //规定数据总数的字段名称，默认：count
+                        ,dataName: 'data' //规定数据列表的字段名称，默认：data
+                    },
+                    parseData: function(res){
+                        return res;
+                    },
+                    cols: [cols]
+                };
+                studentListTable.render(options);
+            });
+        },
+        pay = function(){
+            layui.use("layer",function(){
+                var layer = layui.layer;
+                layer.open({
+                    type: 1,
+                    content: '<img src="'+getBaseUrl()+'/img/weixin_pay.jpg'+'"/>'
+                });
+            });
+        },
+        search = function(){
+            options.url = STU_LIST_URL + "?" + $('#studentListForm').serialize();
+            studentListTable.reload("studentTable",options);
+        };
+
+        bootPage();
+    });
+</script>
+</body>
+</html>

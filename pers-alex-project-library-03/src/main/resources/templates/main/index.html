@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian">
+    <div class="left" th:replace="main/public :: .left">
+
+    </div>
+    <div class="right">
+        <img class="wColck" th:src="@{/img/clock.jpg}" alt=""/>
+        <div class="wFont">
+            <h2>[[${session.loginUser.sUsername}]]</h2>
+            <p>欢迎来到图书管理系统!</p>
+        </div>
+    </div>
+</section>
+<footer class="footer" th:replace="main/public :: .footer"></footer>
+    <script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+	<script th:src="@{/js/time.js}"></script>
+    <script th:src="@{/js/cookie.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        $(function(){
+            if(!![[${session.loginUser}]]){
+                var username = [[${session.loginUser.sUsername}]];
+                var password = [[${session.loginUser.sPwd}]];
+                var rememberme = [[${session.loginUser.iRemember}]];
+                if(!!rememberme){
+                    setCookie(username,password,1);
+                }else{
+                    clearCookie(username);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

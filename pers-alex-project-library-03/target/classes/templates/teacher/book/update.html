@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'manage')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>图书管理页面 >> 修改图书</span>
+        </div>
+        <div class="providerAdd">
+            <form id="updateForm" th:action="@{/teacher/book/update}" method="post">
+                <input type="hidden" name="_method" value="put"/>
+                <div>
+                    <span><strong>书籍编号：</strong></span>
+                    <input type="text" name="sBookId" th:value="${book.sBookId}" th:readonly="readonly"/>
+                </div>
+                <div>
+                    <span><strong>书&emsp;&emsp;名：</strong></span>
+                    <input type="text" id="sBookName" name="sBookName" th:value="${book.sBookName}"/>
+                    <span id="sBookNameTxt">*不为空</span>
+                </div>
+                <div>
+                    <span><strong>作&emsp;&emsp;者：</strong></span>
+                    <input type="text" id="sBookAuthor" name="sBookAuthor" th:value="${book.sBookAuthor}"/>
+                    <span id="sBookAuthorTxt">*不为空</span>
+                </div>
+                <div>
+                    <span><strong>出版社：&emsp;</strong></span>
+                    <input type="text" id="sBookPub" name="sBookPub" th:value="${book.sBookPub}"/>
+                    <span id="sBookPubTxt">*不为空</span>
+                </div>
+                <div>
+                    <span><strong>书籍类别：</strong></span>
+                    <select name="sBookSort" id="sBookSort"></select>
+                    <span id="sBookSortTxt">*不为空</span>
+                </div>
+                <div>
+                    <span><strong>登记时间：</strong></span>
+                    <input type="text" name="sBorrowDate" th:value="${book.sBookRecord}" th:readonly="readonly"/>
+                </div>
+                <div class="providerAddBtn">
+                    <!--<a href="#">保存</a>-->
+                    <!--<a href="providerList.html">返回</a>-->
+                    <input type="button" value="确认" onclick="save();"/>
+                    <input type="button" value="取消" onclick="history.back(-1)"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+<span th:include="main/baseurl :: html"></span>
+<script type="text/javascript" th:inline="javascript">
+    $(function(){
+        var BOOK_SORT_URL = getBaseUrl()+'/booksort';
+        bootPage = function(){
+            registerEvent();
+        };
+
+        registerEvent = function(){
+            $.ajax({
+                url: BOOK_SORT_URL,
+                type: 'get',
+                success: function(result){
+                    if(result && result.length >= 0){
+                        $('#sBookSort').append("<option value=''>书籍分类</option>");
+                        result.forEach(function(val,ind){
+                            $('#sBookSort').append("<option value='"+val["sSortId"]+"'>"+val["sSortName"]+"</option>");
+                        });
+                        $('#sBookSort').val([[${book.sSortId}]]);
+                    }
+                }
+            });
+        },
+        save = function(){
+            if($('#sBookName').val().trim().length == 0){
+                $('#sBookNameTxt').css('color','red');
+                return
+            }
+            if($('#sBookPub').val().trim().length == 0){
+                $('#sBookPubTxt').css('color','red');
+                return
+            }
+            if($('#sBookAuthor').val().trim().length == 0){
+                $('#sBookAuthorTxt').css('color','red');
+                return
+            }
+            $('#updateForm').submit();
+        };
+        bootPage();
+    });
+</script>
+</body>
+</html>

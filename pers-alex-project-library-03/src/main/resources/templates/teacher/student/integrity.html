@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="main/public :: #publicHead">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public :: .publicHeader">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public :: .publicTime">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public :: .left(menuSelect = 'integrity')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>学生管理页面 >> 恢复诚信等级</span>
+        </div>
+        <form id="studentListForm">
+            <div class="search">
+                <span>学 号：</span>
+                <input type="text" name="sStuId" placeholder="请输入学号"/>
+                <input type="button" value="查询" onclick="search();"/>
+            </div>
+        </form>
+        <table id="studentTable" class="layui-table">
+        </table>
+
+    </div>
+</section>
+
+
+<footer class="footer" th:replace="main/public :: .footer">
+
+</footer>
+
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script th:src="@{/js/time.js}"></script>
+<span th:include="main/baseurl :: html"></span>
+<script th:inline="javascript">
+    $(function(){
+        var studentListTable;
+        var options;
+        var cols;
+        var STU_LIST_URL = getBaseUrl()+'/teacher/student/lose_integrity';
+        bootPage = function(){
+            registerEvent();
+            loadTable();
+        };
+
+        registerEvent = function(){},
+
+        loadTable = function(){
+            layui.use("table",function(){
+                studentListTable = layui.table;
+                cols = [
+                    {field: 'sStuId',title:'学号'},
+                    {field: 'sStuName',title:'姓名'},
+                    {field: 'sStuMajor',title:'专业'},
+                    {field: 'sStuGrade',title:'年级'},
+                    {field: 'iBooks',title:'当前逾期次数',align:'center'},
+                    {
+                        field: 'sStuId',
+                        title:'操作',
+                        align: 'center',
+                        templet:function (d) {
+                                    return  '<div>'+
+                                        '<a href="'+getBaseUrl()+'/teacher/student/reset_integrity/' + d.sStuId +'" onclick="return reset(\''+d.sStuId+'\');"><img src="'+getBaseUrl()+ '/img/xiugai.png" alt="重置" title="重置"/></a>'+
+                                        '</div>';
+                        }
+                    }
+                ];
+                options = {
+                    url: STU_LIST_URL,
+                    elem: '#studentTable', //id选择器
+                    height: 300,
+                    even: true,
+                    limit: 5,//默认页大小
+                    limits: [5,10,20,25],
+                    page: {
+                        layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                        ,groups: 1 //只显示 1 个连续页码
+                        ,first: false //不显示首页
+                        ,last: false //不显示尾页
+                    },
+                    request: {
+                        pageName: 'pageNum' //页码的参数名称，默认：page
+                        ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                    },response: {
+                        statusName: 'code' //规定数据状态的字段名称，默认：code
+                        ,statusCode: 0 //规定成功的状态码，默认：0
+                        ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                        ,countName: 'total' //规定数据总数的字段名称，默认：count
+                        ,dataName: 'data' //规定数据列表的字段名称，默认：data
+                    },
+                    parseData: function(res){
+                        return res;
+                    },
+                    cols: [cols]
+                };
+                studentListTable.render(options);
+            });
+        },
+        reset = function(sStuId){
+            $.ajax({
+                url: getBaseUrl()+'/teacher/student/overdue_num/'+sStuId,
+                type: 'get',
+                success: function(result){
+                    if(result == 0){
+                        window.location.href = getBaseUrl()+'/teacher/student/reset_integrity/'+sStuId;
+                    }else{
+                        alert("请先支付逾期账单!");
+                    }
+                }
+            });
+            return false;
+        },
+        search = function(){
+            options.url = STU_LIST_URL + "?" + $('#studentListForm').serialize();
+            studentListTable.reload("studentTable",options);
+        };
+
+        bootPage();
+    });
+</script>
+</body>
+</html>

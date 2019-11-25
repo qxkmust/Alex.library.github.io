@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="library.mapper.AuthcMapper">
+    <select id="login" resultType="entities.User">
+        <choose>
+            <when test="iIdentity == 2 ">
+                select s_manager_id as s_username, s_manager_pwd as s_pwd, #{iIdentity} as i_identity from LIB_MANAGER where s_manager_id = #{sUsername}
+            </when>
+            <otherwise>
+                select s_stu_id as s_username, s_stu_pwd as s_pwd, #{iIdentity} as i_identity from LIB_STUDENT where s_stu_id = #{sUsername}
+            </otherwise>
+        </choose>
+    </select>
+    <update id="repwd">
+        <choose>
+            <when test="iIdentity == 1">
+                update LIB_STUDENT set s_stu_pwd = #{sPwd} where s_stu_id = #{sUsername}
+            </when>
+            <otherwise>
+                update LIB_MANAGER set s_manager_pwd = #{sPwd} where s_manager_id = #{sUsername}
+            </otherwise>
+        </choose>
+    </update>
+    <insert id="saveLog">
+        insert into LIB_LOG(s_username,s_log_detail,s_ip,s_log_time,i_timespan) values(#{sUsername},#{sLogDetail},#{sIp},#{sLogTime},#{iTimespan})
+    </insert>
+
+</mapper>
