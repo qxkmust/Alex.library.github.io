@@ -1,0 +1,14 @@
+library\controller\AuthcController.class
+library\service\LogService.class
+library\Application03.class
+library\component\MyLocaleResolver.class
+library\controller\BookController.class
+library\interf\BookInterface.class
+library\config\DruidConfig.class
+library\config\WebMvcConfig$1.class
+library\interceptor\LoginInterceptor.class
+library\config\WebMvcConfig.class
+library\mapper\BookMapper.class
+library\component\MyAspect.class
+library\service\BookService.class
+library\mapper\AuthcMapper.class
