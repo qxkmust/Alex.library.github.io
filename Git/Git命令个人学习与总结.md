@@ -10,6 +10,14 @@ git checkout 分支名
 
 
 
+- ##### 关联本地与远程分支
+
+```
+git pull origin 分支名 --allow-unrelated-histories
+```
+
+
+
 - ##### 首先进行git add 添加文件
 
 ```
