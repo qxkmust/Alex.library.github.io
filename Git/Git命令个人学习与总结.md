@@ -18,6 +18,11 @@ git add 当前目录某个文件名
 *或者*
 
 当前目录所有(已修改)文件 git add .
+
+warning: LF will be replaced by CRLF
+最简单的一种办法就是把自动转换功能关掉即可。
+输入命令 ：git config core.autocrlf false (仅对当前git仓库有效）
+git config --global core.autocrlf false (全局有效）
 ```
 
 
