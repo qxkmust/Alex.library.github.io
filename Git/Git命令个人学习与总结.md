@@ -56,7 +56,9 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.**
  原因: 远程repository和我本地的repository冲突造成
  解决: 通过新建分支git branch 新的分支名;再次push 到新的分支名
 
-
+如果以上办法都不可行:
+1. 直接切换到提交的分支 git checkout 分支名
+2. 提交到远程仓库地址 git push 远程仓库地址
 ```
 
 ------
