@@ -1,0 +1,23 @@
+# IDEA常用命令与常见问题
+
+#### 常用命令：
+
+- 快速导包	shift+alt+enter
+- 快速提醒    alt+enter
+- 移动当前行    ctrl+alt+up/down
+- 重写方法    ctrl+O
+- 快速查找    ctrl+N
+- 快速补全变量声明    ctrl+alt+v
+- 格式化    ctrl+alt+L
+- 复制当前行    ctrl+D
+- 删除当前行    ctrl+Y
+
+#### 常见问题：
+
+```
+1.关于Idea中右边的maven projects窗口找不到了如何调出来？
+ctrl+shift+A 输入maven 选择 add maven projects 选择项目中的pom文件 即可出现![捕获](D:\Git\MyRepository\Alex.blog.github.io\IDEA\捕获.PNG)
+```
+
+
+
