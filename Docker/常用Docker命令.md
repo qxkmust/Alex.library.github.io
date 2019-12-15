@@ -26,7 +26,17 @@
 
 - 创建（-d）并运行（-i）守护docker容器
 
-  docker run -id --name=名字 -p 宿主端口:docker端口 -v 宿主路径1:docker路径1  -v 宿主路径2:docker路径2  镜像名:版本号
+  docker run -id --name=名字 -p 宿主端口:docker端口 -v 宿主路径1:docker路径1  -v 宿主路径2:docker路径2  --restart=always 镜像名:版本号
+
+  ```
+  -id 创建守护容器（一创建就会启动）
+  -p 指定端口映射
+  -v 挂载路径/文件映射
+  --name 指定名称
+  --restart=always 跟随docker服务运行（docker服务重启后自动运行）
+  ```
+
+  
 
 - 容器发布成镜像
 

@@ -2,7 +2,7 @@
 
 #### 常用命令：
 
-- 快速导包	shift+alt+enter
+- 快速导包	shift+alt+enter alt+/
 - 快速提醒    alt+enter
 - 移动当前行    ctrl+alt+up/down
 - 重写方法    ctrl+O
@@ -11,6 +11,7 @@
 - 格式化    ctrl+alt+L
 - 复制当前行    ctrl+D
 - 删除当前行    ctrl+Y
+- 查看接口的实现    ctrl+H 或者 ctrl+alt+B
 
 #### 常见问题：
 
