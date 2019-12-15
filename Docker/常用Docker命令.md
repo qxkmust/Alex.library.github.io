@@ -16,6 +16,10 @@
 
   docker load -i 压缩文件名.tar
 
+- 查看日志(-f 追踪日志实时显示，--tail=100 最后100行)
+
+  docker -f --tail=100 容器名
+
 - 查看所有docker容器
 
   docker ps -a 
