@@ -62,7 +62,13 @@ hint: its remote counterpart. Integrate the remote changes (e.g.
 hint: 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.**
  原因: 远程repository和我本地的repository冲突造成
- 解决: 通过新建分支git branch 新的分支名;再次push 到新的分支名
+ 解决1: 通过新建分支git branch 新的分支名;再次push 到新的分支名
+ 
+ 解决2：git push -f [remote url]
+ 如果不想再新建分支，可以强行将本地版本推送到远程/分支，但是可能将另一个人的改动覆盖掉，不建议使用
+ 
+ 解决3：先 git fetch [remote url] 然后git merge [remote url]
+ 获取远程分支的变动，与本地分支合并, 之后再push。（但是不那么奏效，第二种虽然暴力，但是有效）
 
 如果以上办法都不可行:
 1. 直接切换到提交的分支 git checkout 分支名
@@ -74,3 +80,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.**
 - 下载远程仓库的所有变动
 
   git fetch [remote url]
+
+- 与本地分支合并
+
+  git merge [remote url]

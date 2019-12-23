@@ -17,8 +17,7 @@
 
 ```
 1.关于Idea中右边的maven projects窗口找不到了如何调出来？
-ctrl+shift+A 输入maven 选择 add maven projects 选择项目中的pom文件 即可出现![捕获](D:\Git\MyRepository\Alex.blog.github.io\IDEA\捕获.PNG)
+ctrl+shift+A 输入maven 选择 add maven projects 选择项目中的pom文件 即可出现!
 ```
 
-
-
+![..\Images\捕获.PNG]()
