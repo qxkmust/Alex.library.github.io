@@ -77,10 +77,17 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.**
 
 ------
 
-- 下载远程仓库的所有变动
+- 将远程最新版本更新到本地
 
-  git fetch [remote url]
+  ```
+  1、查看远程仓库 git remote -v
+      origin  https://github.com/qxkmust/Alex.blog.github.io.git (fetch)
+      origin  https://github.com/qxkmust/Alex.blog.github.io.git (push)
+     其中，origin（指代远程仓库）
+  2、从远程获取最新版本到本地 git fetch origin 远程分支:临时分支temp
+  3、比较本地仓库与下载的temp分支 git diff temp,按q“跳出”
+  4、合并temp分支到本地版本 git merge temp
+  5、删除临时分支 git branch -d temp
+  ```
 
-- 与本地分支合并
-
-  git merge [remote url]
+  
