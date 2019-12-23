@@ -20,4 +20,4 @@
 ctrl+shift+A 输入maven 选择 add maven projects 选择项目中的pom文件 即可出现!
 ```
 
-![Images/捕获.PNG]()
+![https://github.com/qxkmust/Alex.blog.github.io.git/Images/捕获.PNG]()
