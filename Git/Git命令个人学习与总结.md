@@ -71,4 +71,6 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.**
 
 ------
 
-未完待续
+- 下载远程仓库的所有变动
+
+  git fetch [remote url]
