@@ -12,6 +12,7 @@
 - 复制当前行    ctrl+D
 - 删除当前行    ctrl+Y
 - 查看接口的实现    ctrl+H 或者 ctrl+alt+B
+- 代码块包围    ctrl+alt+t
 
 #### 常见问题：
 

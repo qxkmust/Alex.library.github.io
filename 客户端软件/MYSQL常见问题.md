@@ -24,6 +24,38 @@
   	4. 重新导入数据库数据（实现需要备份），表名存储为给定的大小写（大小写不敏感生效）
   ```
 
-  
+- 修改时区
 
-  
+  ```
+  进入mysql数据库，查看当前时区show variables like '%time_zone%';
+  ```
+
+  +---------------------------------+-------------------+
+  | Variable_name                   | Value             |
+  +---------------------------------+-------------------+
+  | connect_timeout                 | 10                |
+  | datetime_format                 | %Y-%m-%d %H:%i:%s |
+  | delayed_insert_timeout          | 300               |
+  | explicit_defaults_for_timestamp | OFF               |
+  | innodb_flush_log_at_timeout     | 1                 |
+  | innodb_lock_wait_timeout        | 50                |
+  | innodb_rollback_on_timeout      | OFF               |
+  | interactive_timeout             | 28800             |
+  | lc_time_names                   | en_US             |
+  | lock_wait_timeout               | 31536000          |
+  | net_read_timeout                | 30                |
+  | net_write_timeout               | 60                |
+  | rpl_stop_slave_timeout          | 31536000          |
+  | slave_net_timeout               | 3600              |
+  | system_time_zone                | UTC               |
+  | time_format                     | %H:%i:%s          |
+  | time_zone                       | SYSTEM            |
+  | timed_mutexes                   | OFF               |
+  | timestamp                       | 1577937811.225014 |
+  | wait_timeout                    | 28800             |
+  +---------------------------------+-------------------+
+
+```
+其中system_time_zone=UTC，说明是标准时间，要改成东八区(China  Standard  Time,CST)，进入/etc/mysql/my.cnf,在[mysqld]下增加default-time-zone='+08:00'
+```
+
